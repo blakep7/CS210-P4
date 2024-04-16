@@ -1,0 +1,294 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{tocloft}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{changepage}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{datetime}
+\usepackage{geometry}
+
+% Set page margins
+\geometry{margin=1in}
+
+\newdateformat{sigdate}{\shortmonthname[\THEMONTH]. \THEDAY, \THEYEAR}
+
+\newcommand{\mysection}[1]{\section*{#1}\hrule\vspace{8pt}\addcontentsline{toc}{section}{#1}}
+
+% Define colors for syntax highlighting
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{codeblue}{rgb}{0.16,0.29,0.68}
+\definecolor{codegreen}{rgb}{0.00,0.54,0.25}
+\definecolor{codeorange}{rgb}{0.90,0.41,0.05}
+
+% Define C language settings
+\lstdefinestyle{cstyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codeblue},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codeorange},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    language=C,
+    emph={int,char,double,float,unsigned,void},
+    emphstyle=\color{codeorange},
+    morekeywords={alignas,alignof,asm,auto,bool,break,case,catch,char,char16_t,
+    char32_t,class,compl,const,const_cast,continue,decltype,default,delete,
+    do,double,dynamic_cast,else,enum,explicit,export,extern,false,float,
+    for,friend,goto,if,inline,int,long,mutable,namespace,new,noexcept,
+    nullptr,operator,private,protected,public,register,reinterpret_cast,
+    return,short,signed,sizeof,static,static_assert,static_cast,struct,
+    switch,template,this,thread_local,throw,true,try,typedef,typeid,
+    typename,union,unsigned,using,virtual,void,volatile,wchar_t,while},
+    escapeinside={(*@}{@*)},
+    frame=tb
+}
+
+\lstdefinestyle{cstyle2}{
+    language=C,
+    basicstyle=\small\ttfamily,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny,
+    numbersep=5pt,
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=4,
+    frame=single,
+    captionpos=b,
+    showstringspaces=false,
+    escapeinside={(*@}{@*)},
+}
+
+% Cover Page
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.7\textwidth]{SDSU.png}
+        \vspace{1cm}
+
+        \large{Department of Computer Science}\\
+        {CS 210 Data Structures}\\
+        \vspace{3cm}
+
+        \LARGE\textbf{Program 4}\\
+        \textbf{Instructions}\\
+
+        \vspace{5cm}
+
+    \end{center}
+\end{titlepage}
+
+%Objective
+\mysection{Student Objective}
+In this assignment, you will delve into implementing essential data structures—Hash Table with Chaining and Binary Search Tree—to efficiently manage large data sets. Your tasks include:
+\begin{itemize}
+    \item Developing a Binary Search Tree with specified functionalities such as size calculation, height determination, and proper node removal.
+    \item Implementing a Hash Table using chaining with LinkedList.
+    \item Ensuring adherence to provided guidelines, including pre- and post-conditions for functions and appropriate handling of tree operations.
+    \item Thoroughly testing your implementations to ensure correctness and efficiency.
+\end{itemize}
+
+\mysection{Instructions}
+The data structures studied previously are not suitable for managing large data sets. For this assignment, you will implement two very useful data structures: Hash Table (using a Linked List) and Binary Search Tree.
+\\[2mm]
+Class prototypes defined in \verb|BinarySearchTree.h|, \verb|LinkedList.h|, and \verb|HashTable.h| are provided. You \emph{must} review each of these files in order to fully understand the expected functionality of each class.
+\\[2mm]
+Program 4 will consist of the following files. You must use exactly these filenames.
+\\
+\renewcommand{\arraystretch}{1.5}
+\hspace{1cm}\begin{tabular}{@{} ll @{}}
+    \verb|BinarySearchTree.h| & The binary search tree definition (provided). \\
+    \verb|LinkedList.h| & The linked list definition (provided). \\
+    \verb|HashTable.h| & The hash table definition (provided). \\
+    \verb|BinarySearchTree.cpp| & The BST implementation (you create). \\
+    \verb|LinkedList.cpp| & The linked list implementation (you create). \\
+    \verb|HashTable.cpp| & The hash table implementation (you create). \\
+    \verb|test.cpp| & The file containing your tests for each data structure (you create). \\
+\end{tabular}
+\\[4mm]
+Your task is to write your own code for the public functions found in the provided header files. Please note that some functions are already implemented in the header files.
+\\[2mm]
+Testing your code is essential and may require more time than writing the classes. Be sure to test combinations of functions.
+\newpage\noindent
+\newpage\noindent
+\mysection{Additional Details}
+\begin{itemize}
+    \item You may add private members as needed.
+    \item You may add public functions strictly for debugging purposes. These must be removed before submitting.
+    \item You may only submit source files specified in the instructions.
+    \item All source code must include the following comments
+    \begin{itemize}
+        \item Header comment that includes name and RedID (See appendix)
+        \item Function comments for every function in the \verb|.cpp| files (See appendix)
+    \end{itemize}
+    \item You are expected to write all the code yourself, you may not use the Standard Library API for any containers.
+    \item Your code should handle all error conditions gracefully. It should never crash.
+    \begin{itemize}
+        \item Follow the comments which specify what exceptions to throw.
+    \end{itemize}
+    \item Your code should not have any memory leaks.
+    \item Your HashTable implementation \textbf{must} use chaining, and use the LinkedList class to do so.
+    \item Your code must compile and run correctly on Gradescope to receive any credit. 
+    \item You MUST write and submit thorough test cases for EACH data structure submitted.
+\end{itemize}
+
+\newpage\noindent
+
+\mysection{Due Date}
+Your project is due on \textbf{Thursday, May 2\textsuperscript{nd}, 11:59 p.m.}. Note that this is the last day of our class for the semester. This date was selected to give you as much time as possible, not to increase your burden at the end of the semester.
+
+\mysection{Opportunity for Extra Credit}
+Start early and complete your project early.  Why?  Early submissions are eligible for extra credit points!
+\begin{itemize}
+    \item +10 points if turned in by April 30\textsuperscript{th}, 11:59 p.m.
+    \item +5 points if turned in by May 1\textsuperscript{st}, 11:59 p.m.
+\end{itemize}
+
+\mysection{Late Program}
+No late programs will be accepted.
+
+\mysection{Turning in Program 4}
+To submit program 4, you must upload the following C++ files to your \verb|Gradescope| account through Canvas. The automated grading platform will run.
+\\[2mm]
+{\large You're limited to \textbf{10} submissions on Gradescope, so ensure that you test your code thoroughly.}
+\\
+
+\renewcommand{\arraystretch}{1.5}
+\hspace{1cm}\begin{tabular}{@{} ll}
+    \verb|BinarySearchTree.h| \\
+    \verb|LinkedList.h| \\
+    \verb|HashTable.h| \\
+    \verb|BinarySearchTree.cpp| \\
+    \verb|LinkedList.cpp| \\
+    \verb|HashTable.cpp| \\
+    \verb|test.cpp| \\ 
+\end{tabular}
+
+\newpage\noindent
+
+\mysection{Hints \& Notes}
+{\large Binary Search Tree}
+\\[2mm]
+\textbf{Note:} The function \verb|height| has no parameters and returns the height of the tree which is defined as the maximum of the heights of all nodes. The height of a node is the number of edges between it and the root node.
+\\[2mm]
+\textbf{Note:} The function \verb|size| has no parameters and returns the number of nodes in the tree.
+\\[2mm]
+\textbf{Note:} The function \verb|remove| should use the successor to replace a node with two child nodes.
+\\[2mm]
+\textbf{Note:} The function \verb|makeEmpty| removes all the nodes from the tree and returns (deallocates) the memory used by the nodes for reuse. The \verb|makeEmpty| function ultimately sets the root pointer value to NULL.
+\\[4mm]
+\textbf{Hint:} Consider maintaining a private \verb|size| variable that is increased by insertion and decreased by deletion, and whose value is returned by the \verb|size()| function. Alternatively, a traversal of the tree when the function is called could also calculate the size of the tree. Similar techniques could determine the height of the tree.
+\\[2mm]
+\textbf{Hint:} Do these tasks a few members at a time. Compile \textbf{and test} after doing each group of a few members. You will be glad you did it this way!
+\\[2mm]
+\textbf{Hint: }  Before you write the operator =, and the copy constructor, note that their jobs have a common task: duplicating another tree. Write a \verb|copyTree| function that abstracts out the common task of these operations, then use it to implement these functions.
+\\[2mm]
+\textbf{Hint: } The makeEmpty and the destructor have a common tree task.
+
+
+\newpage\noindent
+
+\mysection{Code Format and Comments}
+\begin{itemize}
+    \item Proper indentation:
+    \begin{itemize}
+        \item Consistent use of spaces or tabs for indentation (typically 2 or 4 spaces).
+        \item Nested code blocks should be indented accordingly.
+    \end{itemize}
+    
+    \item Consistent use of braces:
+    \begin{itemize}
+        \item Braces should be used consistently for code blocks, including if statements, loops, and functions.
+    \end{itemize}
+    
+    \item Descriptive variable and function names:
+    \begin{itemize}
+        \item Variable and function names should be meaningful and descriptive of their purpose.
+        \item Use of camelCase for naming.
+    \end{itemize}
+    
+    \item Consistent naming conventions:
+    \begin{itemize}
+        \item Follow consistent naming conventions for variables, functions, classes, and other identifiers.
+    \end{itemize}
+    
+    \item Proper spacing:
+    \begin{itemize}
+        \item Use spaces around operators for readability.
+        \item Use consistent spacing within expressions and statements.
+    \end{itemize}
+    
+    \item Use of appropriate data types:
+    \begin{itemize}
+        \item Choose appropriate data types for variables and functions based on their usage and requirements. (We are not concerned about memory usage,
+        so do not worry too much about this one.)
+    \end{itemize}
+    
+    \item Avoidance of magic numbers and hardcoded values:
+    \begin{itemize}
+        \item Use named constants instead of hardcoded values.
+        \item Magic numbers should be avoided or properly explained with comments.
+    \end{itemize}
+    
+    \item Proper use of comments:
+    \begin{itemize}
+        \item Every file should have a header comment with your name and RedID. (Look at example provided in the appendix.)
+        \item Every function should have a leading comment. (Look at example provided in the appendix.)
+        \item Include comments to explain complex logic, algorithms, or non-trivial code blocks.
+        \item Comments should be clear and concise, adding value to the code understanding.
+    \end{itemize}
+\end{itemize}
+
+\mysection{Cheating Policy}
+There is a zero tolerance policy on cheating in this course. You are expected to complete all programming assignments on your own.
+Collaboration with other students in the course is not permitted. You may discuss ideas or solutions in general terms with other students,
+but you must not exchange code. During the grading process I will examine your code carefully. Anyone caught cheating on a programming
+assignment (or on an exam) will receive an "F" in the course, and a referral to Judicial Procedures.
+
+\newpage\noindent
+\mysection{Appendix}
+\begin{lstlisting}[style=cstyle2, caption=Example Header Comment]
+/**
+* @file sample.cpp
+* @author <Your Name> <Your RedID>
+* @brief This is a sample program to show how to comment
+* @date YYYY-MM-DD
+*/
+#include <stdio.h>
+
+int main() {
+    printf("Hello, world!");
+    return 0;
+}
+\end{lstlisting}
+    
+\begin{lstlisting}[style=cstyle2, caption=Example Function Comment]
+/**
+* Returns the Object at the specified position in this list
+* @param index
+* @return Object
+* @throws invalid_argument if index out of range
+*/
+int get(int index) {
+    function definition...
+}
+\end{lstlisting}
+
+\end{document}
